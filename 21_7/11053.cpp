@@ -8,25 +8,15 @@ int numbers[1010];
 int dps[1010];
 int tmp, maximum;
 
-int dp(int x) {
+void dp(int x) {
 
-	if (numbers[x] > numbers[x-1]) {
-		if (numbers[x] > numbers[x-2]) {
-			dps[x] = 1 + max(dps[x-1], dps[x-2]);
-		}
-		else {
-			dps[x] = 1 + dps[x-1];
+	for (int i=0;i<x;i++) {
+
+		if (numbers[x] > numbers[i] && dps[i] + 1 > dps[x]) {
+			dps[x] = 1 + dps[i];
 		}
 	}
-	else {
-		if (numbers[x] > numbers[x-2]) {
-			dps[x] = 1 + dps[x-2];
-		}
-		else {
-			dps[x] = 1;
-		}
-	}
-	return dps[x];
+	
 }
 
 int main() {
@@ -37,21 +27,17 @@ int main() {
 
 	for (int i=0;i<N;i++) {
 		cin >> x;
-		numbers[i] = x;		
-	}
-	
-	dps[0] = 1;
-
-	if (numbers[1] > numbers[0]) {
-		dps[1] = 1 + dps[0];
-	}
-	else {
-		dps[1] = 1;
+		numbers[i] = x;
+		dps[i] = 1;		
 	}
 
-	for (int i=2;i<N;i++) {
-		tmp = dp(i);
-		if (tmp >= maximum) {
+	for (int i=1;i<N;i++) {
+		dp(i);
+	}
+
+	for (int i=0;i<N;i++) {
+		tmp = dps[i];
+		if (tmp > maximum) {
 			maximum = tmp;
 		}
 	}
